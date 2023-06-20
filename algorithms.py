@@ -1,4 +1,5 @@
 """Алгоритмы."""
+from data_structures import Heap
 
 
 def insertion_sort(data: list) -> None:
@@ -18,3 +19,10 @@ def selection_sort(data: list) -> None:
             if data[j] < data[min]:
                 min = j
         data[cur], data[min] = data[min], data[cur]
+
+
+def heap_sort(data: list) -> None:
+    """Пирамидальная сортировка."""
+    heap = Heap(data)
+    for i in range(len(data)):
+        data[i] = heap.extract_min()
