@@ -26,16 +26,23 @@ class Heap:
         """По индексу дочернего элемента возвращает индекс родительского."""
         if item_idx < 0:
             raise Exception('Value is non-positive.')
+
         return (item_idx - 1) // 2 if item_idx else None
 
     def _min_in_cluster(self, item_idx: int):
         """Возвращает индекс наименьшего элемента в кластере родитель-дети."""
         if item_idx * 2 + 2 < self.size:
-            return min(item_idx, item_idx * 2 + 1, item_idx * 2 + 2,
-                       key=(lambda x: self.data[x]))
+            return min(
+                item_idx, item_idx * 2 + 1, item_idx * 2 + 2,
+                key=(lambda x: self.data[x])
+            )
+
         if item_idx * 2 + 1 < self.size:
-            return min(item_idx, item_idx * 2 + 1,
-                       key=(lambda x: self.data[x]))
+            return min(
+                item_idx, item_idx * 2 + 1,
+                key=(lambda x: self.data[x])
+            )
+
         return item_idx
 
     def insert(self, item):
@@ -66,3 +73,93 @@ class Heap:
 
         self.size -= 1
         return min_item
+
+
+class Queue:
+    """Очередь."""
+
+    def __init__(self, data, size_of_cluster=100):
+        """Конструктор очереди."""
+        self.upper = -1
+        self.data = [data, []]
+        self.size_of_cluster = max(len(data), size_of_cluster)
+
+    def clear(self):
+        """Очищает очередь."""
+        self.upper = -1
+        self.data = [[]]
+
+    def pop(self):
+        """Выполняет извлечение и удаление элемента из начала очереди."""
+        self.upper += 1
+
+        if self.upper >= len(self.data[0]):
+            raise Exception('Queue is empty.')
+
+        if self.upper == self.size_of_cluster:
+            self.upper = 0
+            self.data.pop(0)
+
+        return self.data[0][self.upper]
+
+    def push(self, item):
+        """Выполняет вставку элемента в конец очереди."""
+        if len(self.data[-1]) == self.size_of_cluster:
+            self.data.append([])
+
+        self.data[-1].append(item)
+
+    def front(self):
+        """Возвращает первый элемент очереди, не удаляя его."""
+        front = self.upper + 1
+
+        if front >= len(self.data[0]):
+            raise Exception('Queue is empty.')
+
+        return self.data[0][front]
+
+    @property
+    def size(self):
+        """Возвращает размер стэка."""
+        parts = len(self.data[0]) - (self.upper + 1) + len(self.data[-1])
+        core = (
+            (len(self.data) - 2 if len(self.data) - 2 > 0 else 0) *
+            self.size_of_cluster
+        )
+
+        return parts + core
+
+
+class Stack:
+    """Стэк."""
+
+    def __init__(self, data):
+        """Конструктор стэка."""
+        self.data = data
+
+    def clear(self):
+        """Очищает стэк."""
+        self.data = []
+
+    def back(self):
+        """Возвращает верхний элемент стэка, не удаляя его."""
+        if not self.data:
+            raise Exception('Stack is empty.')
+
+        return self.data[-1]
+
+    def pop(self):
+        """Выполняет извлечение и удаление верхнего элемента стэка."""
+        if not self.data:
+            raise Exception('Stack is empty.')
+
+        return self.data.pop()
+
+    def push(self, item):
+        """Выполняет вставку элемента на верх стэка."""
+        self.data.append(item)
+
+    @property
+    def size(self):
+        """Возвращает размер стэка."""
+        return len(self.data)
