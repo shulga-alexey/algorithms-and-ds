@@ -1,5 +1,6 @@
 """Алгоритмы."""
 import math
+import random
 
 from data_structures import Heap, Queue
 
@@ -46,3 +47,26 @@ def merge_sort(data: list) -> None:
                     min(queue1, queue2, key=(lambda x: x.front()))
                 )
                 data[k] = min_queue.pop()
+
+
+def quick_sort(data: list) -> None:
+    """Быстрая сортировка."""
+    def quick_recursion(data=data, start=0, end=len(data)):
+        if start < end:
+            check_idx = random.randint(start, end - 1)
+
+            pivot_idx = start if check_idx != start else start + 1
+            for idx in range(start + 1, end):
+                if data[check_idx] > data[idx]:
+                    data[pivot_idx], data[idx] = data[idx], data[pivot_idx]
+                    pivot_idx += 1 if check_idx != pivot_idx + 1 else 2
+
+            pivot_idx -= 0 if data[check_idx] > data[pivot_idx] else 1
+            data[check_idx], data[pivot_idx] = (
+                data[pivot_idx], data[check_idx]
+            )
+
+            quick_recursion(data, start, pivot_idx)
+            quick_recursion(data, pivot_idx + 1, end)
+
+    quick_recursion()

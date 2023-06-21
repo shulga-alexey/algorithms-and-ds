@@ -124,7 +124,7 @@ class Queue:
 
     @property
     def size(self):
-        """Возвращает размер стэка."""
+        """Возвращает размер очереди."""
         start = len(self.data[0]) - (self.upper + 1)
         core = (
             (len(self.data) - 2 if len(self.data) - 2 > 0 else 0) *
