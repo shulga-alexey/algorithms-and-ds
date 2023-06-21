@@ -1,7 +1,5 @@
-from data_structures import Heap
+from algorithms import merge_sort
 
-l = [1,2,3]
-h = Heap(l)
-print(h.data)
-l.append(-1)
-print(h.data)
+data = [9,4,23,7]
+merge_sort(data)
+print(data)

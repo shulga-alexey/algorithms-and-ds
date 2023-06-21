@@ -74,15 +74,19 @@ class Heap:
         self.size -= 1
         return min_item
 
+    def head(self):
+        """Возвращает минимальный (верхний) элемент пирамиды."""
+        return self.data[0]
+
 
 class Queue:
     """Очередь."""
 
-    def __init__(self, data, size_of_cluster=100):
+    def __init__(self, data, size_of_cluster=None):
         """Конструктор очереди."""
         self.upper = -1
         self.data = [data, []]
-        self.size_of_cluster = max(len(data), size_of_cluster)
+        self.size_of_cluster = size_of_cluster or len(data)
 
     def clear(self):
         """Очищает очередь."""
@@ -93,12 +97,12 @@ class Queue:
         """Выполняет извлечение и удаление элемента из начала очереди."""
         self.upper += 1
 
-        if self.upper >= len(self.data[0]):
-            raise Exception('Queue is empty.')
-
         if self.upper == self.size_of_cluster:
             self.upper = 0
             self.data.pop(0)
+
+        if not self.data[0] or self.upper >= len(self.data[0]):
+            raise Exception('Queue is empty.')
 
         return self.data[0][self.upper]
 
@@ -121,13 +125,19 @@ class Queue:
     @property
     def size(self):
         """Возвращает размер стэка."""
-        parts = len(self.data[0]) - (self.upper + 1) + len(self.data[-1])
+        start = len(self.data[0]) - (self.upper + 1)
         core = (
             (len(self.data) - 2 if len(self.data) - 2 > 0 else 0) *
             self.size_of_cluster
         )
+        end = 0 if not len(self.data) else len(self.data[-1])
 
-        return parts + core
+        return start + core + end
+
+    @property
+    def is_empty(self):
+        """Определяет пуста ли очередь."""
+        return not bool(self.size)
 
 
 class Stack:
