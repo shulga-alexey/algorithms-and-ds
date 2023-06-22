@@ -173,3 +173,116 @@ class Stack:
     def size(self):
         """Возвращает размер стэка."""
         return len(self.data)
+
+
+class Tree:
+    """Бинарное дерево поиска."""
+
+    LEFT_FLUG = 'left'
+    RIGHT_FLUG = 'right'
+
+    def __init__(self, value, left=None, right=None):
+        """Конструктор бинарного дерева."""
+        self.value = value
+        self.left = left
+        self.right = right
+
+    def search(self, item):
+        """Выполняет поиск элемента в бинарном дереве."""
+        if self.value == item:
+            return self
+
+        if self.value > item and self.left:
+            return self.left.search(item)
+
+        if self.value < item and self.right:
+            return self.right.search(item)
+
+        return None
+
+    def insert(self, item):
+        """Выполняет вставку элемента в бинарное дерево."""
+        if self.value == item:
+            return
+
+        object, attribute = (
+            (self.left, self.LEFT_FLUG) if self.value > item else
+            (self.right, self.RIGHT_FLUG)
+        )
+        object.insert(item) if object else setattr(self, attribute, Tree(item))
+
+    def delete(self, item):
+        """Выполняет удаление элемента из бинарного дерева."""
+        if self.value > item and self.left:
+            if self.left.value == item:
+                return self._delete_child(self.LEFT_FLUG)
+            self.left.delete(item)
+
+        if self.value < item and self.right:
+            if self.right.value == item:
+                return self._delete_child(self.RIGHT_FLUG)
+            self.right.dalete(item)
+
+        return False
+
+    def traverse(self):
+        """Выполняет обход бинарного дерева в ширину."""
+
+    def _delete_child(self, child_attr):
+        """Выполняет удаление дочернего элемента."""
+        child = getattr(self, child_attr)
+
+        if not child.left and not child.right:
+            setattr(self, child_attr, None)
+
+        elif child.left and child.right:
+            current = child.right
+
+            while not current.left and current.right:
+                current = current.right
+
+            if not current.left:
+                child.right.left = child.left
+                setattr(self, child_attr, child.right)
+            else:
+                while current.left.left:
+                    current = current.left
+                child.value = current.left.value
+                current.left = None
+
+        elif child.left:
+            setattr(self, child_attr, child.left)
+
+        elif child.right:
+            setattr(self, child_attr, child.right)
+
+        return True
+
+    def _bfs(self, some_process=print):
+        """Выполняет обход бинарного дерева в ширину."""
+        some_process(self.value)
+        step_now = [self]
+
+        while step_now:
+            step_next = []
+
+            for node in step_now:
+                if node.left:
+                    some_process(node.left.value)
+                    step_next.append(node.left)
+
+                if node.right:
+                    some_process(node.right.value)
+                    step_next.append(node.right)
+
+            step_now = step_next
+
+    def _dfs(self, some_process=print):
+        """Выполняет обход бинарного дерева в глубину."""
+        if self.left:
+            self.left._dfs()
+
+        some_process(self.value)
+
+        if self.right:
+            self.right._dfs()
