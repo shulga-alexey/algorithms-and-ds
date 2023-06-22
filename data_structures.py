@@ -225,8 +225,15 @@ class Tree:
 
         return False
 
-    def traverse(self):
-        """Выполняет обход бинарного дерева в ширину."""
+    def traverse_bfs(self):
+        """Возвращает результат обхода бинарного дерева в ширину."""
+        some_process = (lambda x: x)
+        return [item for item in self._dfs(some_process)]
+
+    def traverse_dfs(self):
+        """Возвращает результат обхода бинарного дерева в глубину."""
+        some_process = (lambda x: x)
+        return [item for item in self._dfs(some_process)]
 
     def _delete_child(self, child_attr):
         """Выполняет удаление дочернего элемента."""
@@ -260,7 +267,7 @@ class Tree:
 
     def _bfs(self, some_process=print):
         """Выполняет обход бинарного дерева в ширину."""
-        some_process(self.value)
+        yield some_process(self.value)
         step_now = [self]
 
         while step_now:
@@ -268,11 +275,11 @@ class Tree:
 
             for node in step_now:
                 if node.left:
-                    some_process(node.left.value)
+                    yield some_process(node.left.value)
                     step_next.append(node.left)
 
                 if node.right:
-                    some_process(node.right.value)
+                    yield some_process(node.right.value)
                     step_next.append(node.right)
 
             step_now = step_next
@@ -282,7 +289,7 @@ class Tree:
         if self.left:
             self.left._dfs()
 
-        some_process(self.value)
+        yield some_process(self.value)
 
         if self.right:
             self.right._dfs()
