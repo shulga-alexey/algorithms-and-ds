@@ -1,8 +1,9 @@
 """Алгоритмы."""
+
 import math
 import random
 
-from data_structures import Heap, Queue
+from .data_structures import Heap, Queue
 
 
 def insertion_sort(data: list) -> None:
