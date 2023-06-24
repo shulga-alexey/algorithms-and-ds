@@ -1,79 +1,96 @@
 """Тестирование алгоритмов."""
+import pytest
 
 from main.algorithms import (heap_sort, insertion_sort, merge_sort, quick_sort,
                              selection_sort)
 
 
-class Test01InsertionSort:
-    """Тестирование алгоритма сортировки вставками."""
+class BasicTestSort:
+    """Базовые тесты сортировок."""
 
-    def test_01_insertion_sort(self):
+    @pytest.fixture(autouse=True)
+    def init_sorting_procedure(self, sorting_procedure):
+        self.sorting_procedure = sorting_procedure
+
+    def test_01_sort_empty_list(self):
         """Сортировка пустого списка."""
         data, result = [], []
-        insertion_sort(data)
+        self.sorting_procedure(data)
         assert data == result
 
-    def test_02_insertion_sort(self):
+    def test_02_sort_one_item(self):
         """Сортировка списка с одним элементом."""
         data, result = [1], [1]
-        insertion_sort(data)
+        self.sorting_procedure(data)
         assert data == result
 
-    def test_03_insertion_sort(self):
+    def test_03_sort_two_different_items(self):
         """Сортировка списка с двумя элементами (без повторений)."""
         data, result = [2, 1], [1, 2]
-        insertion_sort(data)
+        self.sorting_procedure(data)
         assert data == result
 
-    def test_04_insertion_sort(self):
+    def test_04_sort_two_duplicate_items(self):
         """Сортировка списка с двумя элементами (с повторениями)."""
         data, result = [1, 1], [1, 1]
-        insertion_sort(data)
+        self.sorting_procedure(data)
         assert data == result
 
-    def test_05_insertion_sort(self):
+    def test_05_sort_three_different_items(self):
         """Сортировка списка с тремя элементами (без повторений)."""
         data, result = [1, -1, 11], [-1, 1, 11]
-        insertion_sort(data)
+        self.sorting_procedure(data)
         assert data == result
 
-    def test_06_insertion_sort(self):
+    def test_06_sort_three_duplicate_items(self):
         """Сортировка списка с тремя элементами (с повторениями)."""
         data, result = [1, -1, 1], [-1, 1, 1]
-        insertion_sort(data)
+        self.sorting_procedure(data)
         assert data == result
 
-    def test_07_insertion_sort(self):
+    def test_07_sort_four_different_items(self):
         """Сортировка списка с четырьмя элементами (без повторений)."""
         data, result = [1, 111, -1, 11], [-1, 1, 11, 111]
-        insertion_sort(data)
+        self.sorting_procedure(data)
         assert data == result
 
-    def test_08_insertion_sort(self):
+    def test_08_sort_four_duplicate_items(self):
         """Сортировка списка с четырьмя элементами (с повторениями)."""
-        data, result = [1, -1, 1, 11], [-1, 1, 1, 11]
-        insertion_sort(data)
+        data, result = [1, -1, 11, 1], [-1, 1, 1, 11]
+        self.sorting_procedure(data)
         assert data == result
 
-class Test02SelectionSort:
+
+@pytest.mark.parametrize('sorting_procedure', (insertion_sort,))
+class Test01InsertionSort(BasicTestSort):
+    """Тестирование алгоритма сортировки вставками."""
+
+    pass
+
+
+@pytest.mark.parametrize('sorting_procedure', (selection_sort,))
+class Test02SelectionSort(BasicTestSort):
     """Тестирование алгоритма сортировки выбором."""
-    
+
     pass
 
 
-class Test03HeapSort:
+@pytest.mark.parametrize('sorting_procedure', (heap_sort,))
+class Test03HeapSort(BasicTestSort):
     """Тестирование алгоритма сортировки вставками."""
 
     pass
 
 
-class Test04MergeSort:
+@pytest.mark.parametrize('sorting_procedure', (merge_sort,))
+class Test04MergeSort(BasicTestSort):
     """Тестирование алгоритма сортировки вставками."""
 
     pass
 
 
-class Test05QuickSort:
+@pytest.mark.parametrize('sorting_procedure', (quick_sort,))
+class Test05QuickSort(BasicTestSort):
     """Тестирование алгоритма сортировки вставками."""
 
     pass

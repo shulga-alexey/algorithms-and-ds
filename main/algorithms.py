@@ -34,7 +34,7 @@ def heap_sort(data: list) -> None:
 
 def merge_sort(data: list) -> None:
     """Сортировка слиянием."""
-    for i in range(int(math.log(len(data), 2))):
+    for i in range(int(math.log(len(data), 2)) if data else 0):
         base = 2 ** i
         for j in range(0, len(data), base * 2):
             queue1, queue2 = (
