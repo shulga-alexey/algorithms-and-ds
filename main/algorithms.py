@@ -34,14 +34,14 @@ def heap_sort(data: list) -> None:
 
 def merge_sort(data: list) -> None:
     """Сортировка слиянием."""
-    for i in range(int(math.log(len(data), 2)) if data else 0):
+    for i in range((int(math.log(len(data), 2)) + 1) if data else 0):
         base = 2 ** i
         for j in range(0, len(data), base * 2):
             queue1, queue2 = (
-                Queue(data[base * j: base * (j + 1)]),
-                Queue(data[base * (j + 1): base * (j + 2)])
+                Queue(data[j: j + base]),
+                Queue(data[j + base: j + base * 2])
             )
-            for k in range(base * j, min(base * (j + 2), len(data))):
+            for k in range(j, min(j + base * 2, len(data))):
                 min_queue = (
                     (queue1 if queue2.is_empty else None) or
                     (queue2 if queue1.is_empty else None) or
@@ -52,22 +52,24 @@ def merge_sort(data: list) -> None:
 
 def quick_sort(data: list) -> None:
     """Быстрая сортировка."""
-    def quick_recursion(data=data, start=0, end=len(data)):
+    def quick_recursion(data=data, start=0, end=len(data) - 1):
         if start < end:
-            check_idx = random.randint(start, end - 1)
+            check_idx = random.randint(start, end)
 
-            pivot_idx = start if check_idx != start else start + 1
-            for idx in range(start + 1, end):
+            pivot_idx = start
+            for idx in range(start, end + 1):
                 if data[check_idx] > data[idx]:
                     data[pivot_idx], data[idx] = data[idx], data[pivot_idx]
-                    pivot_idx += 1 if check_idx != pivot_idx + 1 else 2
+                    if pivot_idx == check_idx:
+                        check_idx = idx
+                    pivot_idx += 1
 
-            pivot_idx -= 0 if data[check_idx] > data[pivot_idx] else 1
-            data[check_idx], data[pivot_idx] = (
-                data[pivot_idx], data[check_idx]
-            )
+            if data[check_idx] < data[pivot_idx]:
+                data[check_idx], data[pivot_idx] = (
+                    data[pivot_idx], data[check_idx]
+                )
 
-            quick_recursion(data, start, pivot_idx)
+            quick_recursion(data, start, pivot_idx - 1)
             quick_recursion(data, pivot_idx + 1, end)
 
     quick_recursion()

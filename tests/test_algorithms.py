@@ -60,6 +60,30 @@ class BasicTestSort:
         self.sorting_procedure(data)
         assert data == result
 
+    def test_09_sort_five_different_items(self):
+        """Сортировка списка с пятью элементами (без повторений)."""
+        data, result = [1111, 1, 111, -1, 11], [-1, 1, 11, 111, 1111]
+        self.sorting_procedure(data)
+        assert data == result
+
+    def test_10_sort_five_duplicate_items(self):
+        """Сортировка списка с пятью элементами (с повторениями)."""
+        data, result = [1, 11, -1, 11, 1], [-1, 1, 1, 11, 11]
+        self.sorting_procedure(data)
+        assert data == result
+
+    def test_11_sort_six_different_items(self):
+        """Сортировка списка с шестью элементами (без повторений)."""
+        data, result = [1111, 1, -11, 111, -1, 11], [-11, -1, 1, 11, 111, 1111]
+        self.sorting_procedure(data)
+        assert data == result
+
+    def test_12_sort_six_duplicate_items(self):
+        """Сортировка списка с шестью элементами (с повторениями)."""
+        data, result = [1, 11, -1, 11, 1, 11], [-1, 1, 1, 11, 11, 11]
+        self.sorting_procedure(data)
+        assert data == result
+
 
 @pytest.mark.parametrize('sorting_procedure', (insertion_sort,))
 class Test01InsertionSort(BasicTestSort):
