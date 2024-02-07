@@ -73,3 +73,18 @@ def quick_sort(data: list) -> None:
             quick_recursion(data, pivot_idx + 1, end)
 
     quick_recursion()
+
+
+def binary_search(data: list, search_item):
+    left, right = 0, len(data) - 1
+    middle = (left + right) // 2
+
+    while left <= right:
+        if data[middle] < search_item:
+            left, right = middle + 1, right
+        elif data[middle] > search_item:
+            left, right = left, middle - 1
+        elif data[middle] == search_item:
+            return middle
+
+    return None
